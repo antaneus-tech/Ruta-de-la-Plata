@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ruta de la Plata: ¿se puede amortizar? Dashboard</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#fff;--panel:#f1f4f6;--fg:#121212;--mut:#5b6770;--line:#c9d3d9;--red:#e3120b;--blue:#006ba2;--cyan:#3ebcd2;--grey:#758d99}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#101418;--panel:#1a2026;--fg:#eef1f3;--mut:#9fb0ba;--line:#34414a;--red:#ff5a52;--blue:#4aa3d4;--grey:#8fa3ae}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#101418;--panel:#1a2026;--fg:#eef1f3;--mut:#9fb0ba;--line:#34414a;--red:#ff5a52;--blue:#4aa3d4;--grey:#8fa3ae}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:1060px;margin:0 auto;padding:0 16px 40px}
+header{border-top:4px solid var(--red);padding-top:14px;margin-bottom:12px}
+h1{font:700 2rem/1.15 Georgia,"Times New Roman",serif;margin:0 0 6px}.sub{color:var(--mut);margin:0}
+.leg{display:flex;flex-wrap:wrap;gap:6px 18px;margin:14px 0;padding:10px 12px;background:var(--panel);font-size:.85rem}
+.leg i{display:inline-block;width:14px;height:14px;border-radius:2px;vertical-align:-2px;margin-right:5px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin:12px 0}
+.kpi{background:var(--panel);padding:12px;border-top:3px solid var(--red)}
+.kpi b{display:block;font:700 1.6rem/1.1 Georgia,serif}.kpi span{font-size:.8rem;color:var(--mut)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(480px,1fr));gap:14px}
+@media (max-width:560px){.grid{grid-template-columns:1fr}}
+.card{background:var(--panel);min-width:0;padding-bottom:10px}
+.sc{overflow-x:auto}svg{display:block;width:100%;height:auto;min-width:560px}
+svg text{fill:var(--fg);font:11.5px system-ui,sans-serif}svg .vl{fill:var(--mut);font-size:11px}
+svg .sr{fill:var(--mut);font-size:10px}svg .au{fill:var(--red);font-size:10.5px;font-weight:700}svg .ti{font:700 14px Georgia,serif}
+.off{font-size:.8rem;margin:6px 10px 0;padding:5px 8px;border-left:3px solid var(--blue);background:var(--bg)}.mine{border-left-color:var(--red)}
+.lect{background:var(--panel);border-left:4px solid var(--red);padding:12px 14px;margin:14px 0}
+details{margin-top:14px;font-size:.82rem}summary{cursor:pointer;font-weight:700}
+a{color:var(--blue)}ol,ul{padding-left:1.2em}li{margin:3px 0}.fin{font-size:.75rem;color:var(--mut)}
+</style></head><body><main>
+<header><h1>Ruta de la Plata: ¿puede amortizarse un tren mixto Gijón–Sevilla?</h1>
+<p class="sub">Tramo cerrado Astorga–Plasencia (347 km), con efecto red. Método de la Comisión Europea. Realizado por: @bcnopenmind</p>
+<p class="sub"><a href="ruta_plata_modelo.xlsx" download>⬇ Descargar el modelo en Excel</a> (supuestos editables, escenarios y sensibilidades; mismo directorio que esta página)</p></header>
+<div class="leg"><b>Cómo leer los gráficos:</b>
+<span><i style="background:var(--blue)"></i>Dato oficial</span><span><i style="background:var(--cyan)"></i>Oficial leído en prensa (*)</span>
+<span><i style="background:var(--grey)"></i>Cifra atribuida, no oficial</span><span><i style="background:var(--red)"></i>Estimación propia</span><span>Línea sobre la barra = rango</span></div>
+<div class="kpis">
+<div class="kpi"><b>≈3.800 M€</b><span>Coste propio de Astorga–Plasencia (3.300–5.900). Oficial: sin cifra. Atribuidas: 4.000–6.000.</span></div>
+<div class="kpi"><b>B/C 0,09 → 0,35</b><span>Caso medio de línea y red plausible-alta. Rentable solo a partir de 1.</span></div>
+<div class="kpi"><b>1,2–2,0 Mt/año</b><span>Mercancías de la línea: 5,5 %–8,9 % del ferrocarril nacional (≈22,5 Mt) y 1–2 % de Algeciras (≈101 Mt).</span></div>
+<div class="kpi"><b>0,6 M viajes/año</b><span>Demanda propia del caso medio, menos de un cuarto de Madrid–Valladolid (2,7 M*).</span></div></div>
+
+<div class="grid">
+<div class="card"><div class="sc" id="r1"></div>
+<p class="off mine">Rojo: reconstrucción valorada aquí (propia). Azul: ya construido con coste oficial. Vía única electrificada, preparada para 250 km/h y doble vía.</p></div>
+<div class="card"><div class="sc" id="c1"></div>
+<p class="off"><b>Oficial:</b> Plasencia–Mérida 11,3 · Madrid–Barcelona 14,4* · media europea 25. Sin cifra oficial de Astorga–Plasencia.</p>
+<p class="off mine"><b>Propia:</b> 11,0 M€/km (9,4–16,9): referencia oficial × 0,65–0,80 de vía única × 1,5–2 en sierra.</p></div>
+<div class="card"><div class="sc" id="c2"></div>
+<p class="off"><b>Oficial:</b> 1.700 M€ (Ministerio, 2024). No hay cifra final auditada del tramo.</p>
+<p class="off mine"><b>Propia:</b> los 1.900 M€ de los promotores, con el uplift ferroviario del 40–68 %, pasan a 2.660–3.190 M€.</p></div>
+<div class="card"><div class="sc" id="d1"></div>
+<p class="off"><b>Oficial:</b> sin previsión de demanda del corredor. Contexto: Renfe, 50,4 M de viajeros de media distancia en 2023 (mi caso medio, ≈1,2 %).</p>
+<p class="off mine"><b>Propia:</b> 3, 6 y 10 pares de trenes al día; valor del viaje 7,9 € (tiempo 4,2 € y externalidades 3,7 €). No hay modelo de gravedad.</p></div>
+<div class="card"><div class="sc" id="d2"></div>
+<p class="off"><b>Oficial:</b> sin previsión de mercancías del corredor.</p>
+<p class="off mine"><b>Propia:</b> 2, 4 y 6 pares de trenes de 600 t netas, factor de retorno 0,7, recorrido de 350 km.</p></div>
+<div class="card"><div class="sc" id="f1"></div>
+<p class="off"><b>Oficial:</b> ferrocarril nacional 5,63 Mt en el 2T de 2026* y Algeciras 67,5 Mt hasta agosto*, ambos anualizados por mí (×4 y ×1,5).</p>
+<p class="off mine"><b>Propia:</b> la red plausible-alta mueve 2 Mt (13 trenes de mercancías al día) y el techo 4 Mt (26 trenes al día).</p></div>
+<div class="card"><div class="sc" id="n2"></div>
+<p class="off"><b>Oficial:</b> el ferrocarril movió 8.900 M t·km en 2024 y la carretera 271.600 M t·km*; cuota ferroviaria del 4,3 % en 2023*.</p>
+<p class="off mine"><b>Propia:</b> con recorrido de 700 km las tkm crecen más que las toneladas (el recorrido medio nacional ronda 395 km, cálculo propio).</p></div>
+<div class="card"><div class="sc" id="k1"></div>
+<p class="off"><b>Oficial:</b> sin capacidades publicadas para el corredor reabierto.</p>
+<p class="off mine"><b>Propia:</b> 30, 50 y 150 trenes al día por método UIC 406 con parámetros asumidos.</p></div>
+<div class="card"><div class="sc" id="e1"></div>
+<p class="off"><b>Oficial:</b> sin ingresos, mantenimiento ni beneficios publicados.</p>
+<p class="off mine"><b>Propia:</b> obra de 6 años, explotación de 30, mantenimiento 0,06 M€/km·año y canon 2–10 €/tren·km.</p></div>
+<div class="card"><div class="sc" id="b1"></div>
+<p class="off"><b>Oficial:</b> sin B/C publicado. El estudio de viabilidad Plasencia–León está licitado y con retraso.</p>
+<p class="off mine"><b>Propia:</b> «muy optimista» triplica la demanda y suma un 50 % a los valores unitarios; «vía llena» son 7,7 Mt.</p></div>
+<div class="card"><div class="sc" id="n1"></div>
+<p class="off"><b>Oficial:</b> no hay flujos origen-destino. Algeciras ≈3,15 M de TEU hasta agosto*, en buena parte transbordo marítimo.</p>
+<p class="off mine"><b>Propia:</b> red plausible-alta: 0,5 M de viajes pasantes (46 €) y 2 Mt a 700 km; techo: 1 M y 4 Mt. Sin valorar inversiones complementarias.</p></div>
+</div>
+
+<div class="lect"><b>Lectura.</b> El canon (5–25 M€/año) no cubre un mantenimiento de ≈21 M€/año. Ninguna alternativa llega a B/C = 1 (renovación básica ≈0,08, propuesta ≈0,09, AVE de doble vía ≈0,06). Con efecto red, el B/C sube a 0,27–0,35 en un caso plausible-alto y solo roza 1 en un techo que exige mover por esta vía casi un tercio de las t·km ferroviarias nacionales (un 1 % de las de carretera). La brecha de 210–280 M€/año equivale a 160–210 € por habitante y año en las cuatro provincias del tramo.</div>
+
+<details><summary>Asunciones</summary><ul>
+<li>A1: Astorga–Plasencia 347 km (Astorga–Salamanca ≈200 km). A2–A5: referencia 11,3 M€/km (1.700 M€ en 150 km), caso alto 14,4; vía única 65–80 %; sierra ×1,5–2; electrificación 0,5 M€/km; sin material móvil ni Mérida–Sevilla. A6: totales de promotores, comisionado y ministro atribuidos por prensa.</li>
+<li>A7: 30 años, tasas del 3 % y 5 %, obra de 6 años, sin valor residual, mantenimiento 0,06 M€/km·año. A8: capacidades 30, 50 y 150 trenes al día. A10: canon 2–10 € por tren·km.</li>
+<li>A9: viajes = pares × 2 × 300 plazas × 45 % × 365; mercancías = trenes × 365 × 600 t × 0,7. A11: 0,4 h a 12 €/h (75 % desviados, 25 % generados); externalidades coche 6, autobús 1,5 y tren 1 c€/pkm. A12: 0,05 €/t·km con 70 % desviado de la carretera. A13: ≈1,33 M de habitantes.</li>
+<li>A14: pasantes con 3 h de ahorro y 46 € por viaje; mercancías de red a 700 km. A15: anualizaciones propias del ferrocarril nacional (×4 sobre el 2T de 2026) y de Algeciras (×1,5 sobre ocho meses).</li></ul></details>
+<details><summary>Fuentes (* = leído en prensa que cita la fuente oficial)</summary><ol>
+<li>Tribunal de Cuentas Europeo 19/2018: <a href="https://www.eca.europa.eu/Lists/ECADocuments/SR18_19/SR_High_Speed_Rail_ES.pdf">eca.europa.eu</a>; Tribunal de Cuentas, Madrid–Barcelona*: <a href="https://www.publico.es/actualidad/ave-madrid-barcelona-tuvo-sobrecoste-31.html">Público</a></li>
+<li>Gobierno 2022: <a href="https://www.lamoncloa.gob.es/presidente/actividades/paginas/2022/180722-sanchez-extremadura-3.aspx">Moncloa</a>; Ministerio 2024: <a href="https://www.lamoncloa.gob.es/serviciosdeprensa/notasprensa/transportes-movilidad-sostenible/Paginas/2024/050223-oscar-puente-merida.aspx">Moncloa</a>; notas reproducidas*: <a href="https://forbes.es/?p=683097">Forbes</a>, <a href="https://www.hosteltur.com/152175_ya-hay-fecha-de-estreno-para-el-tren-de-altas-prestaciones-de-extremadura.html">Hosteltur</a></li>
+<li>DfT, Flyvbjerg y COWI 2004: <a href="https://arxiv.org/pdf/1302.3642">arXiv</a>; Comisión Europea, Guía CBA 2014: <a href="https://jaspers.eib.org/LibraryNP/EC%20Reports/DG%20REGIO%20CBA%20Guide%20for%202014-2020.pdf">DG REGIO</a>; Handbook de costes externos 2019: <a href="https://cedelft.eu/publications/handbook-on-the-external-costs-of-transport-version-2019">CE Delft</a></li>
+<li>Observatorio del Ferrocarril, Anuario 2025: <a href="https://vialibre-ffe.com/pdf/Anuario2025/2025_OFE_04.pdf">OFE</a>; Avant Madrid–Valladolid*: <a href="https://www.diariodevalladolid.es/valladolid/260922/286510/un-avant-valladolid-madrid-de-record-lidera-el-numero-de-viajeros-con-27-millones.html">Diario de Valladolid</a></li>
+<li>Puertos del Estado, Algeciras*: <a href="https://www.elestrechodigital.com/2026/09/16/el-puerto-de-algeciras-roza-el-equilibrio-anual-con-675-millones-de-toneladas-hasta-agosto">El Estrecho Digital</a>; INE y OTLE, mercancías*: <a href="https://trans.info/es/transporte-por-carretera-414502">trans.info</a>; INE 2T 2026*: <a href="https://www.libertaddigital.com/libremercado/2026-09-09/el-tren-se-hunde-con-puente-9-7-millones-de-viajeros-menos-y-el-peor-dato-de-mercancias-en-mas-de-una-decada-7454707/">Libertad Digital</a></li>
+<li>Cifras atribuidas: <a href="https://www.diariodeleon.es/leon/260226/2076870/ruta-plata-pide-turno-ventana-abre-europa-2027.html">Diario de León</a>, <a href="https://www.elsaltodiario.com/tren/se-anuncia-un-estudio-viabilidad-ferrocarril-ruta-plata">El Salto</a></li></ol></details>
+<p class="fin"><a href="ruta_plata_modelo.xlsx" download>⬇ Descargar el modelo en Excel</a>. Paleta aproximada a la de los gráficos de The Economist. Cada gráfico lleva incrustados título, fuentes y autoría: @bcnopenmind.</p>
+
+<script>
+var C={o:'var(--blue)',q:'var(--cyan)',a:'var(--grey)',p:'var(--red)'};
+function frame(id,o,body,bh){var W=640,n=o.t.length,T=16+n*18+(o.u?18:4)+22,F=o.s.length*12+28,H=T+bh+F,s='<rect width="'+W+'" height="'+H+'" fill="var(--panel)"/><rect width="52" height="6" fill="var(--red)"/>';
+o.t.forEach(function(x,i){s+='<text x="10" y="'+(28+i*18)+'" class="ti">'+x+'</text>'});
+if(o.u)s+='<text x="10" y="'+(28+n*18)+'" class="vl">'+o.u+'</text>';
+var L=[['o','Oficial'],['q','Oficial en prensa*'],['a','Atribuida'],['p','Propia']],lx=10;
+L.forEach(function(k){s+='<rect x="'+lx+'" y="'+(T-16)+'" width="10" height="10" fill="'+C[k[0]]+'"/><text x="'+(lx+14)+'" y="'+(T-7)+'" class="sr">'+k[1]+'</text>';lx+=k[1].length*5.4+34});
+s+='<g transform="translate(0,'+T+')">'+body+'</g>';
+var fy=T+bh+8;s+='<line x1="10" x2="630" y1="'+fy+'" y2="'+fy+'" stroke="var(--line)"/>';
+o.s.forEach(function(x,i){s+='<text x="10" y="'+(fy+14+i*12)+'" class="sr">'+x+'</text>'});
+s+='<text x="630" y="'+(H-7)+'" text-anchor="end" class="au">Realizado por: @bcnopenmind</text>';
+document.getElementById(id).innerHTML='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'+o.a+'">'+s+'</svg>'}
+function bars(id,rows,o){var L=215,rh=26,pw=300,s='',x=function(v){return L+v/o.max*pw},bh=rows.length*rh+(o.ref?30:8);
+rows.forEach(function(r,i){var y=4+i*rh;
+s+='<text x="'+(L-8)+'" y="'+(y+12)+'" text-anchor="end">'+r.l+'</text><rect x="'+L+'" y="'+y+'" width="'+Math.max(2,x(r.v)-L)+'" height="16" fill="'+C[r.t]+'"/>';
+if(r.hi){s+='<line x1="'+x(r.v)+'" x2="'+x(r.hi)+'" y1="'+(y+8)+'" y2="'+(y+8)+'" stroke="var(--fg)" stroke-width="2"/><line x1="'+x(r.hi)+'" x2="'+x(r.hi)+'" y1="'+(y+3)+'" y2="'+(y+13)+'" stroke="var(--fg)" stroke-width="2"/>'}
+s+='<text x="'+(x(r.hi||r.v)+6)+'" y="'+(y+12)+'" class="vl">'+r.x+'</text>'});
+if(o.ref){s+='<line x1="'+x(o.ref.v)+'" x2="'+x(o.ref.v)+'" y1="0" y2="'+(bh-24)+'" stroke="var(--fg)" stroke-dasharray="3 3"/><text x="'+x(o.ref.v)+'" y="'+(bh-8)+'" text-anchor="middle" class="vl">'+o.ref.t+'</text>'}
+s+='<line x1="'+L+'" x2="'+L+'" y1="0" y2="'+(bh-(o.ref?24:6))+'" stroke="var(--fg)"/>';frame(id,o,s,bh)}
+frame('r1',{t:['Propuesta: reutilizar lo existente y reconstruir solo Astorga–Plasencia'],u:'Esquema del trazado, ≈900 km (distancias aproximadas)',a:'Trazado por tramos',
+s:['Fuentes: Presidencia del Gobierno y Ministerio de Transportes (Plasencia–Badajoz); El Salto (347 km); reparto propio.']},
+'<g stroke-linecap="round" stroke-width="10" fill="none"><line x1="20" y1="40" x2="110" y2="40" stroke="var(--grey)"/><line x1="110" y1="40" x2="135" y2="40" stroke="var(--cyan)"/><line x1="135" y1="40" x2="300" y2="40" stroke="var(--red)"/><line x1="300" y1="40" x2="400" y2="40" stroke="var(--red)" stroke-dasharray="2 8"/><line x1="400" y1="40" x2="520" y2="40" stroke="var(--blue)"/><line x1="520" y1="40" x2="620" y2="40" stroke="var(--cyan)" stroke-dasharray="2 8"/></g><g fill="var(--fg)"><circle cx="20" cy="40" r="4"/><circle cx="110" cy="40" r="4"/><circle cx="135" cy="40" r="4"/><circle cx="215" cy="40" r="4"/><circle cx="300" cy="40" r="4"/><circle cx="400" cy="40" r="4"/><circle cx="520" cy="40" r="4"/><circle cx="620" cy="40" r="4"/></g><g text-anchor="middle" class="vl"><text x="20" y="26">Gijón</text><text x="110" y="26">León</text><text x="150" y="12">Astorga</text><text x="215" y="26">Zamora</text><text x="300" y="12">Salamanca</text><text x="400" y="26">Plasencia</text><text x="520" y="26">Mérida</text><text x="620" y="26">Sevilla</text><text x="65" y="62">Pajares existente</text><text x="215" y="62">≈200 km vía nueva</text><text x="350" y="78">≈147 km con variantes</text><text x="460" y="62">Ya construido, 1.700 M€*</text><text x="570" y="78">Sin valorar</text></g>',90);
+bars('c1',[{l:'Promotores, 1.900 M€',v:5.5,t:'a',x:'5,5 · atribuida'},{l:'Promotores + uplift DfT P50',v:7.7,t:'p',x:'7,7 · derivada'},{l:'Promotores + uplift DfT P90',v:9.2,t:'p',x:'9,2 · derivada'},{l:'Propuesta, caso central',v:9.4,hi:16.9,t:'p',x:'11,0 · propia'},{l:'Plasencia–Mérida, coste final',v:11.3,t:'o',x:'11,3 · oficial'},{l:'Comisionado, 4.000 M€',v:11.5,t:'a',x:'11,5 · atribuida'},{l:'Madrid–Barcelona, T. Cuentas*',v:14.4,t:'q',x:'14,4 · oficial*'},{l:'Ministro, 6.000 M€',v:17.3,t:'a',x:'17,3 · atribuida'},{l:'Media líneas AV, TCE 19/2018',v:25,t:'o',x:'25 · oficial'}],
+{max:31,ref:{v:11,t:'Propuesta: 11,0'},a:'Coste por kilómetro',t:['Los costes finales oficiales de una vía mixta rondan 11–14 M€/km','y la cifra de los promotores queda por debajo'],u:'Coste de infraestructura, M€ por km',s:['Fuentes: Tribunal de Cuentas Europeo 19/2018; Tribunal de Cuentas vía Público*; Moncloa 2022 y 2024;','DfT, Flyvbjerg y COWI 2004; Diario de León y El Salto (cifras atribuidas).']});
+bars('c2',[{l:'Antes de la apertura*',v:1200,t:'q',x:'>1.200 · oficial*'},{l:'Inauguración, jul-2022',v:1500,t:'o',x:'>1.500 · oficial'},{l:'Ministerio, 2024',v:1700,t:'o',x:'1.700 · oficial'},{l:'Nota posterior del Ministerio*',v:1800,t:'q',x:'>1.800 · oficial*'},{l:'Promotores, Astorga–Plasencia',v:1900,t:'a',x:'1.900 · atribuida'}],
+{max:2500,a:'Evolución de la cifra oficial',t:['La cifra oficial de Plasencia–Badajoz pasó de 1.200 a más de 1.800 M€'],u:'Inversión comunicada, M€ (alcance contable no idéntico)',s:['Fuentes: Presidencia del Gobierno 2022; Ministerio de Transportes 2024; notas reproducidas por Hosteltur y Forbes*.']});
+bars('d1',[{l:'Caso bajo (3 pares al día)',v:0.30,t:'p',x:'0,30 · propia'},{l:'Caso medio (6 pares)',v:0.59,t:'p',x:'0,59 · propia'},{l:'Caso alto (10 pares)',v:0.99,t:'p',x:'0,99 · propia'},{l:'Madrid–Valladolid Avant, 2025*',v:2.7,t:'q',x:'2,7 · oficial*'},{l:'Previsión oficial del corredor',v:0.001,t:'a',x:'sin publicar'}],
+{max:3.4,a:'Demanda de viajeros',t:['Mi demanda media es menos de un cuarto de la de Madrid–Valladolid'],u:'Viajes al año, millones = pares × 2 × 300 plazas × 45 % × 365',s:['Fuentes: Observatorio del Ferrocarril, Anuario 2025; Renfe vía Diario de Valladolid*; escenarios propios (A9).']});
+bars('d2',[{l:'Caso bajo (2 pares)',v:0.61,t:'p',x:'0,61 · propia'},{l:'Caso medio (4 pares)',v:1.23,t:'p',x:'1,23 · propia'},{l:'Caso alto (6 pares)',v:1.84,t:'p',x:'1,84 · propia'},{l:'Previsión oficial del corredor',v:0.001,t:'a',x:'sin publicar'}],
+{max:2.4,a:'Mercancías de la línea',t:['Sin efecto red, la línea movería de 0,6 a 1,8 Mt de mercancías al año'],u:'Millones de toneladas al año',s:['Fuentes: escenarios propios (A9); no existe previsión oficial de mercancías del corredor.']});
+bars('f1',[{l:'Línea, caso medio',v:1.23,t:'p',x:'1,2 Mt · 5,5 % del ferrocarril'},{l:'Red plausible-alta',v:2.0,t:'p',x:'2,0 Mt · 8,9 %'},{l:'Red, techo',v:4.0,t:'p',x:'4,0 Mt · 17,8 %'},{l:'Ferrocarril nacional (anualizado)*',v:22.5,t:'q',x:'≈22,5 Mt · oficial*'},{l:'Puerto de Algeciras (anualizado)*',v:101,t:'q',x:'≈101 Mt · oficial*'}],
+{max:150,a:'Volumen de mercancías frente al total',t:['La línea movería entre el 5 % y el 18 % de las toneladas ferroviarias del país'],u:'Mt al año y porcentaje del ferrocarril nacional',s:['Fuentes: INE 2T 2026 vía Libertad Digital* (×4); Puertos del Estado vía El Estrecho Digital* (×1,5); cálculos propios.']});
+bars('n2',[{l:'Línea, caso medio (430 M t·km)',v:4.8,t:'p',x:'4,8 % · 0,16 % de la carretera'},{l:'Red plausible-alta (1.400)',v:15.7,t:'p',x:'15,7 % · 0,5 %'},{l:'Red, techo (2.800)',v:31.5,t:'p',x:'31,5 % · 1,0 %'},{l:'Ferrocarril nacional, 2024*',v:100,t:'q',x:'8.900 M t·km · oficial*'}],
+{max:130,a:'Toneladas-kilómetro frente al total',t:['En t·km, el techo exige casi un tercio del tráfico ferroviario nacional'],u:'% del ferrocarril nacional; % de la carretera (271.600 M t·km en 2024)',s:['Fuentes: INE y OTLE vía trans.info* (cuota del 4,3 % en 2023); cálculos propios (A14).']});
+bars('k1',[{l:'Renovación básica (cap. 30)',v:67,hi:107,t:'p',x:'67 % (hasta 107 %)'},{l:'Propuesta mixta (cap. 50)',v:40,hi:64,t:'p',x:'40 % (hasta 64 %)'},{l:'AVE doble vía (cap. 150)',v:13,hi:21,t:'p',x:'13 % (hasta 21 %)'}],
+{max:150,ref:{v:100,t:'100 % de uso'},a:'Uso de la capacidad',t:['Una vía única mixta queda al 40 % de uso; la renovación básica se satura'],u:'Uso de la capacidad, % (barra: caso medio; línea: caso alto)',s:['Fuentes: método UIC 406 con parámetros propios (A8); escenarios propios (A9).']});
+bars('e1',[{l:'Canon del gestor (2–10 €/tren·km)',v:5,hi:25,t:'p',x:'5–25'},{l:'Beneficio social, caso medio',v:19.7,t:'p',x:'19,7'},{l:'Mantenimiento de la vía',v:21,t:'p',x:'21'},{l:'Necesario B/C=1: renov. básica',v:126,hi:161,t:'p',x:'126–161'},{l:'Necesario B/C=1: propuesta',v:230,hi:301,t:'p',x:'230–301'},{l:'Necesario B/C=1: AVE doble vía',v:351,hi:463,t:'p',x:'351–463'}],
+{max:580,a:'Flujos anuales en M€',t:['Los beneficios no cubren el mantenimiento; harían falta 12–15 veces más'],u:'M€ al año (línea: de la tasa del 5 % a la del 3 %, o rango de canon)',s:['Fuentes: Comisión Europea, Guía CBA 2014; Handbook de costes externos 2019; valores propios (A7, A10–A12).']});
+bars('b1',[{l:'Bajo (10 trenes al día)',v:0.033,hi:0.043,t:'p',x:'0,03–0,04'},{l:'Medio (20 trenes al día)',v:0.065,hi:0.086,t:'p',x:'0,07–0,09'},{l:'Alto (32 trenes al día)',v:0.101,hi:0.132,t:'p',x:'0,10–0,13'},{l:'Muy optimista (×3, +50 %)',v:0.302,hi:0.395,t:'p',x:'0,30–0,40'},{l:'Vía llena de mercancías (7,7 Mt)',v:0.31,hi:0.41,t:'p',x:'0,31–0,41'},{l:'B/C oficial del corredor',v:0.002,t:'a',x:'sin publicar'}],
+{max:1.2,ref:{v:1,t:'B/C = 1: umbral'},a:'Relación beneficio coste',t:['La relación beneficio/coste de la línea no pasa de 0,4 ni en el caso optimista'],u:'B/C con tasas sociales del 5 % y del 3 %',s:['Fuentes: Comisión Europea, Guía CBA 2014 (30 años); Observatorio del Ferrocarril; cálculos propios (A9–A12).']});
+bars('n1',[{l:'Caso medio, sin efecto red',v:0.065,hi:0.086,t:'p',x:'0,07–0,09'},{l:'Red plausible-alta',v:0.265,hi:0.347,t:'p',x:'0,27–0,35'},{l:'Red, techo (4 Mt, 1 M pasantes)',v:0.504,hi:0.66,t:'p',x:'0,50–0,66'},{l:'Techo con valores +50 %',v:0.756,hi:0.99,t:'p',x:'0,76–0,99'},{l:'B/C oficial del corredor',v:0.002,t:'a',x:'sin publicar'}],
+{max:1.2,ref:{v:1,t:'B/C = 1: umbral'},a:'Relación beneficio coste con efecto red',t:['Con efecto red, el B/C sube a 0,27–0,35 y solo roza 1 en un techo irreal'],u:'B/C con Galicia, Asturias, Cantabria, Algeciras, Málaga, Sevilla y Madrid conectados',s:['Fuentes: Puertos del Estado*, INE y OTLE* vía prensa; Comisión Europea, Guía CBA 2014; cálculos propios (A14).']});
+</script></main></body></html>
